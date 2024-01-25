@@ -1,63 +1,26 @@
-#include<stdio.h>
-
-int min(int,int);
-void floyds(int p[10][10],int n)
-{
- int i,j,k;
- for(k=1;k<=n;k++)
-  for(i=1;i<=n;i++)
-   for(j=1;j<=n;j++)
-    if(i==j)
-     p[i][j]=0;
-    else
-     p[i][j]=min(p[i][j],p[i][k]+p[k][j]);
+#include<iostream>
+using namespace std;
+void floyd(int a[][20], int n){
+for(int k = 0; k < n; k++)
+for(int i = 0; i < n; i++)
+for(int j = 0; j < n; j++)
+if(a[i][j] > a[i][k] + a[k][j])
+a[i][j] = a[i][k] + a[k][j];
+cout<<"\nAll pairs shortest path: "<<endl;
+for(int i = 0; i < n; i++){
+for(int j = 0; j < n; j++)
+cout<<a[i][j]<<"\t";
+cout<<endl;
 }
-int min(int a,int b)
-{
- if(a<b)
-  return(a);
- else
-  return(b);
 }
-int main()
-{
- int p[10][10],w,n,e,u,v,i,j;
- printf("\n Enter the number of vertices:");
- scanf("%d",&n);
- printf("\n Enter the number of edges:\n");
- scanf("%d",&e);
- for(i=1;i<=n;i++)
- {
-  for(j=1;j<=n;j++)
-   p[i][j]=999;
- }
- for(i=1;i<=e;i++)
- {
-  printf("\n Enter the end vertices of edge%d with its weight \n",i);
-  scanf("%d%d%d",&u,&v,&w);
-  p[u][v]=w;
- }
- printf("\n Matrix of input data:\n");
- for(i=1;i<=n;i++)
- {
-  for(j=1;j<=n;j++)
-   printf("%d \t",p[i][j]);
-  printf("\n");
- }
- floyds(p,n);
- printf("\n Transitive closure:\n");
- for(i=1;i<=n;i++)
- {
-  for(j=1;j<=n;j++)
-   printf("%d \t",p[i][j]);
-  printf("\n");
- }
- printf("\n The shortest paths are:\n");
- for(i=1;i<=n;i++)
-  for(j=1;j<=n;j++)
-  {
-   if(i!=j)
-    printf("\n <%d,%d>=%d",i,j,p[i][j]);
-  }
-  return 0;
+int main(){
+int n, a[20][20];
+cout<<"No. of vertices: ";
+cin>>n;
+cout<<"\nCost adjacency matrix (999 for no edge and 0 for self loop):";
+for(int i = 0; i < n; i++)
+for(int j = 0; j < n; j++)
+cin>>a[i][j];
+floyd(a, n);
+return 0;
 }
