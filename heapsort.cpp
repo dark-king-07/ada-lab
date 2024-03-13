@@ -1,77 +1,48 @@
 #include<iostream>
+#include<chrono>
 using namespace std;
-
-class heapsort
+using namespace chrono;
+void heapify(int a[], int n, int i)
 {
-    int smallest,left,right,i;
-    public:
-        void heapify(int array[],int n,int i);
-        void sort(int array[],int n);
-};
-
-void heapsort::heapify(int array[],int n,int i)
-{
-    smallest=i;
-    left=2*i+1;
-    right=2*i+2;
-    
-    if(left<n && array[left]<array[smallest])
-        smallest=left;
-        
-    if(right<n && array[right]<array[smallest])
-        smallest=right;
-        
-    if(smallest!=i)
-    {
-        swap(array[i],array[smallest]); 
-        heapify(array,n,smallest);
-    }
+   int lar = i;
+   int l = 2 * i + 1;
+   int r = 2 * i + 2;
+   if(l < n && a[l] > a[lar])
+     lar = l;
+   if(r < n && a[r] > a[lar])
+     lar = r;
+   if(lar != i)
+   {
+     swap(a[lar], a[i]);
+     heapify(a, n, lar);
+   }
 }
-
-void heapsort::sort(int array[],int n)
+void heapSort(int a[], int n)
 {
-     for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(array, n, i);
- 
-    for (int i = n - 1; i >= 0; i--) {
-        swap(array[0], array[i]);
- 
-        heapify(array, i, 0);
-    }
+   for (int i = n/2 - 1; i >= 0; i--)
+     heapify (a, n, i);
+   for (int i = n - 1; i >= 0; i--)
+   {
+      swap(a[0], a[i]);
+      heapify(a, i, 0);
+   }
 }
-
 int main()
 {
-    int size;
-    cout<<"\nEnter the number of students:";
-    cin>>size;
-    
-    int array[size];
-    clock_t start= clock();
-    cout<<"\nEnter the "<<size<<" student IDs in any order:\n";
-    for(int i=0;i<size;i++)
-    {
-        cin>>array[i];
-    }
-    
-    cout<<"\nThe Student IDs before sorting is:";
-    for(int i=0;i<size;i++)
-    {
-        cout<<array[i]<<"\t";
-    }
-    
-    heapsort object;
-    
-    object.sort(array,size);
-    
-    cout<<"\nThe Student IDs after sorting is:";
-    for(int i=size-1;i>=0;i--)
-    {
-        cout<<array[i]<<"\t";
-    }
-    
-    clock_t end=clock();
-    double time=double(end-start)/double(CLOCKS_PER_SEC);
-    cout<<"\nEXECUTION TIME :"<<fixed<<time;
-    return 0;
+   int n;
+   cout<<"\n How many student?: ";
+   cin>>n;
+   int a[n];
+   cout<<"\n Enter "<<n<<" student id's in any order: ";
+   for (int i = 0; i < n; i++)
+     cin >> a[i];
+   auto start = high_resolution_clock :: now();
+   heapSort(a, n);
+   auto endt = high_resolution_clock :: now();
+   cout<<"\n Students id after sorting are :";
+   for (int i = 0; i < n; i++)
+     cout<<a[i]<<" ";
+   auto duration = duration_cast <microseconds> (endt - start);
+   cout<<"\nTime complexity : "<<duration.count()<<" ms";
+   return 0;
 }
