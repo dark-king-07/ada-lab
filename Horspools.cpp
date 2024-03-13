@@ -1,72 +1,61 @@
 #include <iostream>
-#include <vector>
-#include <string>
-
+#include <chrono>
+#include <cstring>
 using namespace std;
-
-const int MAX_CHAR = 256;
-
-void computeShifts(const string& pattern, vector<int>& shifts) {
-    int m = pattern.size();
-
-    for (int i = 0; i < MAX_CHAR; ++i) {
-        shifts[i] = m;
-    }
-
-    for (int i = 0; i < m - 1; ++i) {
-        shifts[pattern[i]] = m - 1 - i;
-    }
+using namespace chrono;
+const int MAX_CHAR = 256; // Assuming ASCII characters
+int ST[MAX_CHAR];
+void shiftTable(string p) 
+{
+  int n = p.size();
+  for (int i = 0; i < MAX_CHAR; i++) 
+  {
+     ST[i] = n;
+  }
+  for (int j = 0; j < n - 1; j++) 
+  {
+     ST[p[j]] = n - 1 - j;
+   }
 }
-
-int horspoolSearch(const string& text, const string& pattern) {
-    int n = text.size();
-    int m = pattern.size();
-
-    vector<int> shifts(MAX_CHAR);
-
-    computeShifts(pattern, shifts);
-
-    int i = 0;
-    while (i <= n - m) {
-        int j = m - 1;
-
-        while (j >= 0 && pattern[j] == text[i + j]) {
-            j--;
-        }
-
-        if (j < 0) {
-            return i;
-        } else {
-            i += shifts[text[i + m - 1]];
-        }
-    }
-
-    return -1;
-}
-
-int main() {
-    int quit;
-    string text;
-    string pattern;
-    
-    cout<<"\nEnter DNA in any combination with alphabets A C G T:";
-    cin>>text;
-    
-    do
+int horspool(string p, string s) 
+{
+  shiftTable(p);
+  int m = p.size();
+  int n = s.size();
+  int i = m - 1;
+  while (i <= n - 1) 
+  {
+    int k = 0;
+    while (k <= m - 1 && p[m - 1 - k] == s[i - k]) 
     {
-        cout<<"Enter the pattern that you want to search in the DNA sequence:";
-        cin>>pattern;
-        int result = horspoolSearch(text, pattern);
-
-        if (result != -1) {
-            cout << "Pattern found at index " << result << endl;
-        } else {
-            cout << "Pattern not found in the text" << endl;
-        }
-        cout<<"\nEnter 1 to exit and 0 to continue:";
-        cin>>quit;
-    }while(quit!=1);
-    
-
-    return 0;
+      k++;
+    }
+    if (k == m) 
+    {
+       return i - m + 1;
+    } 
+    else 
+    {
+       i = i + ST[s[i]];
+    }
+  }
+return -1;
+}
+int main() 
+{
+   string s, p;
+   cout << "\nEnter a string: ";
+   getline(cin, s);
+   cout << "\nEnter pattern to be searched: ";
+   getline(cin, p);
+   auto start = high_resolution_clock::now();
+   int res = horspool(p, s);
+   auto endt = high_resolution_clock::now();
+   if (res == -1)
+     cout << "\nPattern not found";
+   else
+     cout << "\nPattern found at position " << res + 1;
+   auto duration = duration_cast<microseconds>(endt - start);
+   cout << "\nTime complexity: " << duration.count() << " ms";
+   return 0;
 }
