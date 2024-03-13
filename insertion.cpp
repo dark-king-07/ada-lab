@@ -1,46 +1,29 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
-
-void insertionSort(int arr[], int n) 
+void Insertion (int A[], int n)
 {
-  for (int i = 1; i < n; i++) 
+  int v, j;
+  for(int i = 1; i < n; i++)
   {
-    int key = arr[i];
-    int j = i - 1;
-    while (j >= 0 && arr[j] > key) 
+    v = A[i];
+    j = i - 1;
+    while (j >= 0 && A[j] > v)
     {
-      arr[j + 1] = arr[j];
-      j--;
+       A[j+1] = A[j];
+       j = j-1;
     }
-    arr[j + 1] = key;
+    A[j+1] = v;
   }
 }
-
-void printArray(int arr[], int n) {
-  for (int i = 0; i < n; i++) {
-    cout << arr[i] << " ";
-  }
-  cout << endl;
-}
-
-
-
-
-int main() 
+int main()
 {
-  cout<<"enter the size\n";
-  int s;
-  cin>>s;
-  int a[s];
-  cout<<"Enter "<<s<<" elements\n";
-  for(int i=0;i<s;i++)
-   {
-    cin>>a[i];
-   }
-  cout<<"Unsorted array: ";
-  printArray(a, s);
-  insertionSort(a,s);
-  cout << "Sorted array: ";
-  printArray(a, s);
-  return 0;
+  int A[]={5, 9, 2, 7, 1};
+  int n =sizeof(A)/sizeof(A[0]);
+  cout<<"Elements before swapping: ";
+  for(int i = 0; i < n; i++)
+    cout<<A[i]<<" ";
+  Insertion(A, n);
+  cout<<"\nElements after swapping: ";
+  for(int i = 0; i < n; i++)
+    cout<<A[i]<<" ";
 }
