@@ -1,87 +1,49 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
-
-void merge(int arr[], int l, int m, int r) 
-{
-  int n1 = m - l + 1;
-  int n2 = r - m;
-
-  int L[n1], R[n2];
-  for (int i = 0; i < n1; i++) 
-  {
-    L[i] = arr[l + i];
-  }
-  for (int j = 0; j < n2; j++) 
-  {
-    R[j] = arr[m + 1 + j];
-  }
-
-  int i = 0, j = 0, k = l;
-  while (i < n1 && j < n2) 
-  {
-    if (L[i] <= R[j]) 
-    {
-      arr[k] = L[i];
-      i++;
-    } 
-    else 
-    {
-      arr[k] = R[j];
-      j++;
-    }
-    k++;
-  }
-
-  while (i < n1) 
-  {
-    arr[k] = L[i];
-    i++;
-    k++;
-  }
-
-  while (j < n2) 
-  {
-    arr[k] = R[j];
-    j++;
-    k++;
-  }
+void merge (int L[], int R[], int A[], int nL, int nR){
+int i, j, k;
+i = j = k = 0;
+while (i < nL && j < nR){
+if(L[i] <= R[j]){
+A[k] = L[i];
+i++;
 }
-
-void mergeSort(int arr[], int l, int r) 
-{
-  if (l < r) 
-  {
-    int m = l + (r - l) / 2;
-    mergeSort(arr, l, m);
-    mergeSort(arr, m + 1, r);
-    merge(arr, l, m, r);
-  }
+else{
+A[k] = R[j];
+j++;
 }
-
-void printArray(int arr[], int size) 
-{
-  for (int i = 0; i < size; i++) 
-  {
-    cout << arr[i] << " ";
-  }
-  cout << endl;
+k++;
 }
-
-int main() 
-{
-  cout<<"enter the size\n";
-  int s;
-  cin>>s;
-  int a[s];
-  cout<<"Enter "<<s<<" elements\n";
-  for(int i=0;i<s;i++)
-   {
-    cin>>a[i];
-   }
-  cout<<"Unsorted array: ";
-  printArray(a, s);
-  mergeSort(a, 0, s - 1);
-  cout << "Sorted array: ";
-  printArray(a, s);
-  return 0;
+while (i < nL){
+A[k] = L[i];
+i++; k++;
+}
+while (j < nR){
+A[k] = R[j];
+j++; k++;
+}
+}
+void mergeSort(int A[], int n){
+if (n > 1){
+int mid = n/2;
+int Left[mid], Right[n-mid];
+for (int i = 0; i < mid; i++)
+Left[i] = A[i];
+for (int i = mid; i < n; i++)
+Right[i-mid] = A[i];
+mergeSort(Left, mid);
+mergeSort(Right, n-mid);
+merge (Left, Right, A, mid, n-mid);
+}
+}
+int main(){
+int A[6]={5, 9, 2, 7, 1, 3};
+int n = sizeof(A)/sizeof(A[0]);
+cout<<"Elements before swapping: ";
+for(int i = 0; i < n; i++)
+cout<<A[i]<<" ";
+mergeSort(A, n);
+cout<<"\nElements after swapping: ";
+for(int i = 0; i < n; i++)
+cout<<A[i]<<" ";
 }
